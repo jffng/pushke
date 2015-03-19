@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>God's Voice - Client</title>
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+</head>
+<body>
+	<script>
+		var socket = io();
+		
+		var song;
+		
+		var context = new AudioContext();
+
+		socket.on('god', function(){
+			loadSong("tts.wav");
+		});
+
+		function loadSong(url) {
+			var request = new XMLHttpRequest();
+			request.open('GET', url, true);
+			request.responseType = 'arraybuffer';
+
+			// Decode asynchronously
+			request.onload = function() {
+					context.decodeAudioData(request.response, function(buffer) {
+						song = buffer;
+
+						playSound(song);
+				});
+			}
+			request.send();
+		}
+
+		function playSound(buffer) {
+			var source = context.createBufferSource(); // creates a sound source
+			source.buffer = buffer;                    // tell the source which sound to play
+			source.connect(context.destination);       // connect the source to the context's destination (the speakers)
+			source.start(0);                           // play the source now
+			source.onended = function (){
+				socket.emit('x');
+				console.log('journey ended');
+			}
+		}
+
+	</script>
+
+</body>
+</html>
