@@ -28,14 +28,14 @@ var myPort = new SerialPort(portName, {
 	parser: serialport.parsers.readline('\r\n')
 });
 
+
+var addingTzedekah = false;
+var last_range_reading = 0;
+
 myPort.on('data', function(data){
 	var url = '"http://translate.google.com/translate_tts?tl=en&q=Hello%20World"';
 
-	console.log(data);
-
-	if (data<5){
-		wget(url);
-	}
+	setTimeout(function(){ wget(url); }, 3000);
 });
 
 socket.on('connection', function(socket){

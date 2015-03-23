@@ -25,6 +25,7 @@
 // this constant won't change.  It's the pin number
 // of the sensor's output:
 const int pingPin = 7;
+int last_reading = 6;
 
 void setup() {
   // initialize serial communication:
@@ -59,12 +60,16 @@ void loop()
 //  Serial.print(inches);
 //  Serial.print("in, ");
  if(cm < 6){
-    Serial.print(cm);
-  //  Serial.print("cm");
-    Serial.println();
+   if(cm < last_reading || cm != last_reading){
+     // do nothing
+   } else {
+     Serial.println(cm);
+   }
  }
  
-  delay(100);
+ last_reading = cm;
+ 
+ delay(100);
 }
 
 long microsecondsToInches(long microseconds)
