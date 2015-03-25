@@ -59,8 +59,8 @@ void loop()
 //  
 //  Serial.print(inches);
 //  Serial.print("in, ");
- if(cm < 6){
-   if(cm < last_reading || cm != last_reading){
+ if(cm < 6 && cm != last_reading){
+   if(cm < last_reading){
      // do nothing
    } else {
      Serial.println(cm);
@@ -69,7 +69,7 @@ void loop()
  
  last_reading = cm;
  
- delay(100);
+ delay(75);
 }
 
 long microsecondsToInches(long microseconds)

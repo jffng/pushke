@@ -4,7 +4,8 @@ var express = require('express'),
 	socket = require('socket.io')(http),
 	util = require('util'),
 	exec = require('child_process').exec,
-	serialport = require('serialport');
+	serialport = require('serialport'),
+	holy = require('holy');
 
 var SerialPort = serialport.SerialPort;
 
@@ -23,29 +24,40 @@ function wget(ttsUrl){
 	});
 }
 
-var myPort = new SerialPort(portName, {
-	baudrate: 9600,
-	parser: serialport.parsers.readline('\r\n')
-});
+function getRandomInt(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// var myPort = new SerialPort(portName, {
+// 	baudrate: 9600,
+// 	parser: serialport.parsers.readline('\r\n')
+// });
 
 
 var addingTzedekah = false;
 var last_range_reading = 0;
 
-myPort.on('data', function(data){
-	var url = '"http://translate.google.com/translate_tts?tl=en&q=Hello%20World"';
+// myPort.on('data', function(data){
+	// var url = '"http://translate.google.com/translate_tts?tl=en&q=Hello%20World"';
 
-	setTimeout(function(){ wget(url); }, 3000);
-});
+// 	setTimeout(function(){ wget(url); }, 3000);
+// });
 
 socket.on('connection', function(socket){
 	console.log('a user connected');
 });
 
+
 app.use("/", express.static(__dirname + "/public"));
 
 app.get('/test', function(request, response){
+	var index = getRandomInt(0, holy.statements.length - 1);
+	var statement =  encodeURIComponent(holy.statements[index]);
+	console.log(statement);
+	var url = '\"http://translate.google.com/translate_tts?tl=en&q='+statement+'\"'
+	console.log(url);
 
+	setTimeout(function(){ wget(url); }, 3000);
 
 	response.send('ok!');
 });

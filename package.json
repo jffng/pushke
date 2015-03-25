@@ -1,0 +1,29 @@
+{
+  "name": "pushke",
+  "version": "0.0.0",
+  "description": "talking tzedekah box",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/jffng/pushke"
+  },
+  "keywords": [
+    "node",
+    "arduino",
+    "judaism"
+  ],
+  "author": "jeff ong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jffng/pushke/issues"
+  },
+  "homepage": "https://github.com/jffng/pushke",
+  "dependencies": {
+    "express": "~4.12.3",
+    "socket.io": "~1.3.5",
+    "serialport": "~1.6.3"
+  }
+}
