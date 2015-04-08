@@ -9,7 +9,7 @@ var express = require('express'),
 
 var SerialPort = serialport.SerialPort;
 
-var portName = '/dev/cu.usbmodemfd121';
+var portName = '/dev/cu.usbmodemfa131';
 
 function wget(ttsUrl){
 	exec('wget -q -U Chrome -O public/tts.wav ' + ttsUrl,
@@ -28,20 +28,23 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// var myPort = new SerialPort(portName, {
-// 	baudrate: 9600,
-// 	parser: serialport.parsers.readline('\r\n')
-// });
+var myPort = new SerialPort(portName, {
+	baudrate: 9600,
+	parser: serialport.parsers.readline('\r\n')
+});
 
 
 var addingTzedekah = false;
 var last_range_reading = 0;
 
-// myPort.on('data', function(data){
-	// var url = '"http://translate.google.com/translate_tts?tl=en&q=Hello%20World"';
-
-// 	setTimeout(function(){ wget(url); }, 3000);
-// });
+myPort.on('data', function(data){
+	var index = getRandomInt(0, holy.statements.length - 1);
+	var statement =  encodeURIComponent(holy.statements[index]);
+	console.log(statement);
+	var url = '\"http://translate.google.com/translate_tts?tl=en&q='+statement+'\"'
+	// console.log(url);
+	setTimeout(function(){ wget(url); }, 3000);	
+});
 
 socket.on('connection', function(socket){
 	console.log('a user connected');

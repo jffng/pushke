@@ -13,11 +13,18 @@
 		
 		var context = new AudioContext();
 
+		var convolver = context.createConvolver();
+
 		socket.on('god', function(){
-			loadSong("tts.wav");
+			loadBuffer("tts.wav", playSound);
 		});
 
-		function loadSong(url) {
+		function initConvolver(buffer){
+			convolver.buffer = buffer;
+			convolver.connect(context.destination);
+		}
+
+		function loadBuffer(url, callback) {
 			var request = new XMLHttpRequest();
 			request.open('GET', url, true);
 			request.responseType = 'arraybuffer';
@@ -25,9 +32,7 @@
 			// Decode asynchronously
 			request.onload = function() {
 					context.decodeAudioData(request.response, function(buffer) {
-						song = buffer;
-
-						playSound(song);
+						callback(buffer);
 				});
 			}
 			request.send();
@@ -35,14 +40,17 @@
 
 		function playSound(buffer) {
 			var source = context.createBufferSource(); // creates a sound source
+			// source.playbackRate.value = .9;
 			source.buffer = buffer;                    // tell the source which sound to play
-			source.connect(context.destination);       // connect the source to the context's destination (the speakers)
+			source.connect(convolver);       // connect the source to the context's destination (the speakers)
 			source.start(0);                           // play the source now
-			source.onended = function (){
-				socket.emit('x');
-				console.log('journey ended');
-			}
+			// source.onended = function (){
+			// 	socket.emit('x');
+			// 	console.log('journey ended');
+			// }
 		}
+
+		loadBuffer("church_impulse_response.wav", initConvolver);
 
 	</script>
 
